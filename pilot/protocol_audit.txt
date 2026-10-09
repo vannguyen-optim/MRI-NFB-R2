@@ -1,0 +1,7 @@
+Profile: pilot
+Grid: publication48
+Images: 1
+Test realizations/image: 3
+MATLAB: 26.1.0.3276743 (R2026a) Update 3
+Platform: MACA64
+No completeness or numerical-failure issue found by this audit.
