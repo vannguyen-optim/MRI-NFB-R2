@@ -2,7 +2,7 @@ function checks = test_mri_workflow()
 %TEST_MRI_WORKFLOW Tiny constant-image integration test; NOT research data.
 % Exercises tuning, frozen import, per-task resume, export, and refusal guards.
 root=setup_mri(); folder=tempname; mkdir(folder);
-guard=onCleanup(@()cleanup_dir(folder)); %#ok<NASGU>
+guard=onCleanup(@()cleanup_dir(folder)); 
 image=100*ones(4,5); cfg=mri_tv_config('tuning');
 cfg.outDir=fullfile(folder,'tuning'); cfg.runTests=false;
 cfg.noiseStd=0;
@@ -13,19 +13,19 @@ assert(T.complete && T.allCalibrationSuccessful);
 nCandidates=numel(mri_tv_parameters('MRI',true,cfg.gridName));
 assert(numel(T.calibration)==4*nCandidates*numel(cfg.calibrationSeeds));
 assert(numel(T.selected)==4);
-text=[text evalc('U=run_mri_tv(image,3,0,cfg);')]; %#ok<AGROW>
+text=[text evalc('U=run_mri_tv(image,3,0,cfg);')]; 
 assert(isequaln(T.selected,U.selected));
 assert(isequaln(T.calibration,U.calibration));
 c=cfg; c.profile='publication'; c.tuningOnly=false;
 c.outDir=fullfile(folder,'test'); c.tuningFile=fullfile(folder,'tuning','tuning.mat');
-text=[text evalc('R=run_mri_tv(image,3,2,c);')]; %#ok<AGROW>
+text=[text evalc('R=run_mri_tv(image,3,2,c);')]; 
 assert(numel(R.records)==8 && all(cellfun(@(r)r.success,R.records)));
-text=[text evalc('R2=run_mri_tv(image,3,2,c);')]; %#ok<AGROW>
+text=[text evalc('R2=run_mri_tv(image,3,2,c);')]; 
 assert(isequaln(R.records,R2.records));
-rep=export_mri_tv_paper(c.outDir,false); %#ok<NASGU>
+rep=export_mri_tv_paper(c.outDir,false); 
 assert(exist(fullfile(c.outDir,'summary_benchmark.csv'),'file')==2);
 t=fileread(fullfile(c.outDir,'tables','paper_parameters_i01.tex'));
-assert(~isempty(strfind(t,'\begin{tabular}'))); %#ok<STREMP>
+assert(~isempty(strfind(t,'\begin{tabular}'))); 
 assert(~any(uint8(t)<32 & ~ismember(uint8(t),[9 10 13])));
 changed=c; changed.tolKKT=2*c.tolKKT;
 expect_error(@()run_mri_tv(image,3,2,changed),'MRI:TuningMismatch');
